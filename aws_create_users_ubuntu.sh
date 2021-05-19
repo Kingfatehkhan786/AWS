@@ -1,47 +1,28 @@
 #!/bin/bash
+set -eux
 
-#
-# Initial script to create users when launching an Ubuntu server EC2 instance
-#
 
 declare -A USERKEY
-
-#
-# Create one entry for every user who needs access. Be sure to change the key to their
-# public key. The keys here are all my key.
-#
-USERKEY[Fateh]="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyFgGobmiU2H+9TA3H5lx2F/MLUErDlq65PCj8Y1goarTdbZf2sDvYJjdwA8btHGn0scoYH0cSIjxUEteA+NjIMAiG94AcN+UXJH99XmenIGxwRKvludZL1Np2UXZRPLo1JgoGyCgypS3THTbkbOxeOZ3wGAEW9YYxNhZ96cHKl1ORxFOzZ80ZS4C+LQEFDCaMykBUFxilFhvUPpuyuj9BCPfRXBDcLyYYBObKcdBvnBjC5bezg+BB/ihQNn76PJjdVVxVd2WxUtyCjf4/+Sn3R0M2VPI9AUXfmoSjZVS1nasaKmgGeftVvzL3aqzQWHabxGIhBCqdQ4+7TrIeb6Kb tom"
-
+# Please change the user name as you want
+USERKEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjsDjwQg4UNyk2kTKXsYm6wDzOeEJyhX/1XavfxynwAm4Ss4Fk4wfTvhdoJXLt0iW2yvLwrJUwpB9nJOkC2M3KcdHu3Jz6TuXTs2bNUMJJmSt9tyNydQYj1Ev4JNHRcaCElekth6wmjazY4Hq3pLQB9hAKX3llZGRw+>"
 declare -A SUDOUSER
 
-#
-# Add one entry below for each user who needs sudo access.
-# The usernames should be same as above.
-#
-SUDOUSER[Fateh]=y
 
-# Iterate through all users (based on the associative array USERKEY)
-for user in "${!USERKEY[@]}" ; do
-  # Add the user (--gecos "" ensures that this runs non-interactively)
-  adduser --disabled-password --gecos "" $user
+user_name='moti'
 
-  # Give read-only access to log files by adding the user to adm group
-  # Other groups that you may want to add are apache, nginx, mysql etc. for their log files
-  usermod -a -G adm $user
+# please change the group anme sudo to wheel when you r using centos or redhat
+group_name='sudo'
 
-  # If the user needs sudo access, give that.
-  if [ "${SUDOUSER[$user]}" == 'y' ] ; then
-    # Give sudo access by adding the user to sudo group
-    usermod -a -G sudo $user
-    # Allow passwordless sudo
-    echo "$user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-cloud-init-users
-  fi
+sudo useradd -m  --shell /bin/bash -G ${group_name} ${user_name}
 
-  # Add the user's auth key to allow ssh access
-  mkdir /home/$user/.ssh
-  echo "${USERKEY[$user]}" >> /home/$user/.ssh/authorized_keys
+# -m  will create user folder under home by default
+# -d will create user in custom location like /var/www/ ( -d /var/www/ )
 
+sudo mkdir /home/$user_name/.ssh
+sudo echo "${USERKEY}" >> /home/$user_name/.ssh/authorized_keys
   # Change ownership and access modes for the new directory/file
-  chown -R $user:$user /home/$user/.ssh
-  chmod -R go-rx /home/$user/.ssh
-done
+
+sudo chown -R $user_name:$user_name /home/$user_name/.ssh
+sudo chmod -R go-rx /home/$user_name/.ssh
+#allow password less access
+sudo echo "$user_name ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-cloud-init-users
