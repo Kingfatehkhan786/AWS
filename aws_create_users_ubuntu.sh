@@ -3,11 +3,12 @@ set -eux
 
 
 declare -A USERKEY
-# Please change the user name as you want
+
+# put public key here so once the server going to create it will copy this key to the user .ssh folder
 USERKEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjsDjwQg4UNyk2kTKXsYm6wDzOeEJyhX/1XavfxynwAm4Ss4Fk4wfTvhdoJXLt0iW2yvLwrJUwpB9nJOkC2M3KcdHu3Jz6TuXTs2bNUMJJmSt9tyNydQYj1Ev4JNHRcaCElekth6wmjazY4Hq3pLQB9hAKX3llZGRw+>"
 declare -A SUDOUSER
 
-
+# Please change the user name as you want
 user_name='moti'
 
 # please change the group anme sudo to wheel when you r using centos or redhat
