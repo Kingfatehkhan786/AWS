@@ -58,10 +58,9 @@ echo "password123" | passwd --stdin fateh
 
 If you make no changes to the script , you can login to EC2 after a few minutes using this command. Passoword is password123 . Replace the IP with your EC2 IP
 ```
-ssh fateh@11.22.23.24
+ssh fateh@ip
 ```
-## Assumptions
-- Amazon Linux AMI is used , may not work for all linux distros
+
 
 
 
