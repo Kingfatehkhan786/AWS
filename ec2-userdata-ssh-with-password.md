@@ -1,4 +1,4 @@
-## Lab 7 SSH With passoword instead of ssh keys
+
 
 ## Steps
 1. From an SSH client, log in to your EC2 instance. Create one like in the lab 1 if you don't have an EC2 Instance running. 
