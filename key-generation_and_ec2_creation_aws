@@ -1,0 +1,26 @@
+# ===================================
+# Key_pair_generation
+# =====================================
+import boto3
+ec2_client=boto3.client("ec2")
+key_pair=ec2_client.create_key_pair(KeyName="TEXT")
+data=key_pair["KeyMaterial"]
+import io
+with io.open("TEXT.pem","w",encoding="utf-8")as f1:
+    f1.write(str(data))
+    f1.close()
+# ====================================
+# Ec2_create
+# =======================================
+import boto3
+ec2 = boto3.resource('ec2')
+instances = ec2.create_instances(
+  ImageId='ami-042e8287309f5df03',
+
+  MinCount=1,
+  MaxCount=1, 
+  InstanceType='t2.micro',
+  KeyName='TEXT'
+)
+
+
